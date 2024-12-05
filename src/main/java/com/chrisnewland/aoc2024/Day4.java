@@ -58,7 +58,6 @@ public class Day4
 				case SOUTHWEST -> new Position(x - 1, y + 1);
 			};
 		}
-
 	}
 
 	static class Grid

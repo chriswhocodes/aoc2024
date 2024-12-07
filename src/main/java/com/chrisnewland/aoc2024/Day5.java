@@ -93,7 +93,7 @@ public class Day5
 
 			for (List<Integer> pages : updates)
 			{
-				int middle = getMiddleSum(pages);
+				long middle = getMiddleSum(pages);
 
 				if (middle == 0)
 				{
@@ -113,7 +113,7 @@ public class Day5
 			return sum;
 		}
 
-		private int getMiddleSum(List<Integer> pages)
+		private long getMiddleSum(List<Integer> pages)
 		{
 			Set<Integer> seen = new HashSet<>();
 

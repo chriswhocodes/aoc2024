@@ -18,12 +18,12 @@ public class Day6
     {
         List<String> lines = Files.readAllLines(Paths.get("src/main/resources/2024/day6.txt"));
 
-        Day6 day5 = new Day6(lines);
+        Day6 day6 = new Day6(lines);
 
-        long result1 = day5.part1();
+        long result1 = day6.part1();
         System.out.printf("Part 1: %d\n", result1);
 
-        long result2 = day5.part2ExhaustiveSearch();
+        long result2 = day6.part2ExhaustiveSearch();
         System.out.printf("Part 2: %d\n", result2);
     }
 

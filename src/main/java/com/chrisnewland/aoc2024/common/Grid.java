@@ -1,6 +1,9 @@
 package com.chrisnewland.aoc2024.common;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Grid
 {
@@ -100,6 +103,39 @@ public class Grid
         return count;
     }
 
+    public List<Position> getPositionsOf(char c)
+    {
+        List<Position> positions = new ArrayList<>();
+
+        for (int ypos = 0; ypos < y; ypos++)
+        {
+            for (int xpos = 0; xpos < x; xpos++)
+            {
+                if (data[xpos][ypos] == c)
+                {
+                    positions.add(new Position(xpos, ypos));
+                }
+            }
+        }
+
+        return positions;
+    }
+
+    public Set<Character> getUniqueCharacters()
+    {
+        Set<Character> chars = new HashSet<>();
+
+        for (int ypos = 0; ypos < y; ypos++)
+        {
+            for (int xpos = 0; xpos < x; xpos++)
+            {
+                chars.add(data[xpos][ypos]);
+            }
+        }
+
+        return chars;
+    }
+
     public Position getStartingPosition(char c)
     {
         for (int ypos = 0; ypos < y; ypos++)
@@ -118,12 +154,12 @@ public class Grid
 
     public void set(Position position, char c)
     {
-        data[position.x][position.y] = c;
+        data[position.getX()][position.getY()] = c;
     }
 
     public char getCharAt(Position position)
     {
-        return data[position.x][position.y];
+        return data[position.getX()][position.getY()];
     }
 
     public String getString(Position start, Direction direction, int length)
@@ -152,12 +188,12 @@ public class Grid
 
     public char charAt(Position pos)
     {
-        return data[pos.x][pos.y];
+        return data[pos.getX()][pos.getY()];
     }
 
     public boolean valid(Position pos)
     {
-        return pos.x >= 0 && pos.x < x && pos.y >= 0 && pos.y < y;
+        return pos.getX() >= 0 && pos.getX() < x && pos.getY() >= 0 && pos.getY() < y;
     }
 
     public int getX()

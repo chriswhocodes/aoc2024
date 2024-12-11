@@ -35,6 +35,24 @@ public enum Direction
         };
     }
 
+    public Direction opposite()
+    {
+        return switch(this)
+        {
+            case NORTH -> SOUTH;
+            case SOUTH -> NORTH;
+
+            case EAST -> WEST;
+            case WEST -> EAST;
+
+            case NORTHEAST -> SOUTHWEST;
+            case SOUTHWEST -> NORTHEAST;
+
+            case SOUTHEAST -> NORTHWEST;
+            case NORTHWEST -> SOUTHEAST;
+        };
+    }
+
     public char getSymbol()
     {
         return switch (this)

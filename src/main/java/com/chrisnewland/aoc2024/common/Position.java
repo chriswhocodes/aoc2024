@@ -97,4 +97,9 @@ public class Position
             throw new RuntimeException("Not a straight line between " + this +" and " + position);
         }
     }
+
+    public boolean adjacent(Position other)
+    {
+        return move(Direction.NORTH).equals(other) || move(Direction.SOUTH).equals(other) || move(Direction.EAST).equals(other) || move(Direction.WEST).equals(other);
+    }
 }

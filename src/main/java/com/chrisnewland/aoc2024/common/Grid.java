@@ -85,6 +85,22 @@ public class Grid
         return sb.toString();
     }
 
+    public String toStringInt()
+    {
+        StringBuilder sb = new StringBuilder();
+
+        for (int ypos = 0; ypos < y; ypos++)
+        {
+            for (int xpos = 0; xpos < x; xpos++)
+            {
+                sb.append((int)(data[xpos][ypos]));
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
     public int countOccurrences(char c)
     {
         int count = 0;

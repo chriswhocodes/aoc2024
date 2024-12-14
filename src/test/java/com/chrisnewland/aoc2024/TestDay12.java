@@ -1,6 +1,7 @@
 package com.chrisnewland.aoc2024;
 
 import com.chrisnewland.aoc2024.common.Grid;
+import com.chrisnewland.aoc2024.common.RegionManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class TestDay12
 
 		Grid grid = new Grid(lines);
 
-		Day12.RegionManager regionManager = new Day12.RegionManager(grid);
+		RegionManager regionManager = new RegionManager(grid, true);
 
 		assertEquals(4, regionManager.getForIdentifier('A').get(0).getArea());
 		assertEquals(4, regionManager.getForIdentifier('B').get(0).getArea());
@@ -101,7 +102,7 @@ public class TestDay12
 
 		Grid grid = new Grid(lines);
 
-		Day12.RegionManager regionManager = new Day12.RegionManager(grid);
+		RegionManager regionManager = new RegionManager(grid, true);
 
 		assertEquals(4, regionManager.getForIdentifier('A').get(0).getSides());
 		assertEquals(4, regionManager.getForIdentifier('B').get(0).getSides());
@@ -127,7 +128,7 @@ public class TestDay12
 
 		Grid grid = new Grid(lines);
 
-		Day12.RegionManager regionManager = new Day12.RegionManager(grid);
+		RegionManager regionManager = new RegionManager(grid, true);
 
 		assertEquals(12, regionManager.getForIdentifier('E').get(0).getSides());
 		assertEquals(4, regionManager.getForIdentifier('X').get(0).getSides());

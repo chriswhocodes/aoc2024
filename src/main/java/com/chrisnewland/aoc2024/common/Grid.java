@@ -23,8 +23,8 @@ public class Grid
 
     public Grid(List<String> lines)
     {
-        x = lines.size();
-        y = lines.get(0).length();
+        x = lines.get(0).length();
+        y = lines.size();
         data = new char[x][y];
         originalData = new char[x][y];
 

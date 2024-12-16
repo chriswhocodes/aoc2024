@@ -1,5 +1,6 @@
 package com.chrisnewland.aoc2024.common;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +56,16 @@ public class Grid
             }
         }
     }
+
+    public void swapChar(Position pos0, Position pos1)
+    {
+        char char0 = charAt(pos0);
+        char char1 = charAt(pos1);
+        
+        set(pos0, char1);
+        set(pos1, char0);
+    }
+
 
     public void reset()
     {

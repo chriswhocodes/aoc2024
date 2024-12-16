@@ -5,14 +5,13 @@ import com.chrisnewland.aoc2024.common.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Day15
 {
 	public static void main(String[] args) throws IOException
 	{
-		List<String> lines = Files.readAllLines(Paths.get("src/main/resources/2024/day15.txt.test"));
+		List<String> lines = Files.readAllLines(Paths.get("src/main/resources/2024/day15.txt"));
 
 		Day15 day15 = new Day15(lines);
 
@@ -103,13 +102,9 @@ public class Day15
 
 			Position robot = positions.get(0);
 
-			System.out.println(grid);
-
 			for (int i = 0; i < length; i++)
 			{
 				char c = moves.charAt(i);
-
-				System.out.println("move: " + c);
 
 				Direction direction = switch (c)
 				{
@@ -132,13 +127,11 @@ public class Day15
 				}
 				else if (nextChar == OBSTACLE)
 				{
-					// do nothing
+					// blocked
 				}
 				else
 				{
 					boolean pushed = push(next, direction, wide);
-
-					System.out.println("pushed: " + pushed);
 
 					if (pushed)
 					{
@@ -147,8 +140,6 @@ public class Day15
 						robot = next;
 					}
 				}
-
-				System.out.println(grid);
 			}
 		}
 
@@ -175,10 +166,7 @@ public class Day15
 								Position pTop = new Position(next.getX(), m);
 								Position pBottom = new Position(next.getX(), m + 1);
 
-								char top = grid.charAt(pTop);
-								char bottom = grid.charAt(pBottom);
-								grid.set(pTop, bottom);
-								grid.set(pBottom, top);
+								grid.swapChar(pTop, pBottom);
 							}
 							return true;
 						}
@@ -186,7 +174,91 @@ public class Day15
 				}
 				else
 				{
-// find cascading width when swapping down
+					char boxChar = grid.charAt(next);
+
+					int searchLeft;
+					int searchRight;
+
+					if (boxChar == BOX_LEFT)
+					{
+						searchLeft = next.getX();
+						searchRight = next.getX() + 1;
+					}
+					else
+					{
+						searchLeft = next.getX() - 1;
+						searchRight = next.getX();
+					}
+
+					List<Position> boxesToShift = new LinkedList<>();
+					boxesToShift.add(new Position(searchLeft, next.getY()));
+
+					for (int y = next.getY() - 1; y > 0; y--)
+					{
+						boolean allSpaces = true;
+
+						Set<Position> boxesThisRow = new HashSet<>();
+
+						for (int x = searchLeft; x <= searchRight; x++)
+						{
+							char c = grid.charAt(new Position(x, y));
+
+							if (c == OBSTACLE)
+							{
+								return false;
+							}
+							else if (c == BOX_LEFT)
+							{
+								allSpaces = false;
+								if (x == searchRight)
+								{
+									searchRight++;
+								}
+
+								boxesThisRow.add(new Position(x, y));
+							}
+							else if (c == BOX_RIGHT)
+							{
+								allSpaces = false;
+								if (x == searchLeft)
+								{
+									searchLeft--;
+								}
+								boxesThisRow.add(new Position(x-1, y));
+
+							}
+						}
+
+						if (!boxesThisRow.isEmpty())
+						{
+							int nextSearchLeft = Integer.MAX_VALUE;
+							int nextSearchRight = Integer.MIN_VALUE;
+
+							for (Position position : boxesThisRow)
+							{
+								nextSearchLeft = Math.min(nextSearchLeft, position.getX());
+								nextSearchRight = Math.max(nextSearchRight, position.getX());
+							}
+
+							searchLeft = nextSearchLeft;
+							searchRight = nextSearchRight+1;
+
+							boxesToShift.addAll(boxesThisRow);
+						}
+
+						if (allSpaces)
+						{
+							Collections.reverse(boxesToShift);
+
+							for (Position position : boxesToShift)
+							{
+								grid.swapChar(position, position.move(Direction.NORTH));
+								grid.swapChar(position.move(Direction.EAST), position.move(Direction.EAST).move(Direction.NORTH));
+							}
+
+							return true;
+						}
+					}
 				}
 			}
 			case SOUTH ->
@@ -208,10 +280,7 @@ public class Day15
 								Position pTop = new Position(next.getX(), m - 1);
 								Position pBottom = new Position(next.getX(), m);
 
-								char top = grid.charAt(pTop);
-								char bottom = grid.charAt(pBottom);
-								grid.set(pTop, bottom);
-								grid.set(pBottom, top);
+								grid.swapChar(pTop, pBottom);
 							}
 							return true;
 						}
@@ -219,7 +288,91 @@ public class Day15
 				}
 				else
 				{
+					char boxChar = grid.charAt(next);
 
+					int searchLeft;
+					int searchRight;
+
+					if (boxChar == BOX_LEFT)
+					{
+						searchLeft = next.getX();
+						searchRight = next.getX() + 1;
+					}
+					else
+					{
+						searchLeft = next.getX() - 1;
+						searchRight = next.getX();
+					}
+
+					List<Position> boxesToShift = new LinkedList<>();
+					boxesToShift.add(new Position(searchLeft, next.getY()));
+
+					for (int y = next.getY() + 1; y < grid.getY(); y++)
+					{
+						boolean allSpaces = true;
+
+						Set<Position> boxesThisRow = new HashSet<>();
+
+						for (int x = searchLeft; x <= searchRight; x++)
+						{
+							char c = grid.charAt(new Position(x, y));
+
+							if (c == OBSTACLE)
+							{
+								return false;
+							}
+							else if (c == BOX_LEFT)
+							{
+								allSpaces = false;
+								if (x == searchRight)
+								{
+									searchRight++;
+								}
+
+								boxesThisRow.add(new Position(x, y));
+							}
+							else if (c == BOX_RIGHT)
+							{
+								allSpaces = false;
+								if (x == searchLeft)
+								{
+									searchLeft--;
+								}
+								boxesThisRow.add(new Position(x-1, y));
+
+							}
+						}
+
+						if (!boxesThisRow.isEmpty())
+						{
+							int nextSearchLeft = Integer.MAX_VALUE;
+							int nextSearchRight = Integer.MIN_VALUE;
+
+							for (Position position : boxesThisRow)
+							{
+								nextSearchLeft = Math.min(nextSearchLeft, position.getX());
+								nextSearchRight = Math.max(nextSearchRight, position.getX());
+							}
+
+							searchLeft = nextSearchLeft;
+							searchRight = nextSearchRight+1;
+
+							boxesToShift.addAll(boxesThisRow);
+						}
+
+						if (allSpaces)
+						{
+							Collections.reverse(boxesToShift);
+
+							for (Position position : boxesToShift)
+							{
+								grid.swapChar(position, position.move(Direction.SOUTH));
+								grid.swapChar(position.move(Direction.EAST), position.move(Direction.EAST).move(Direction.SOUTH));
+							}
+
+							return true;
+						}
+					}
 				}
 			}
 			case EAST ->
@@ -239,10 +392,7 @@ public class Day15
 							Position pRight = new Position(m, next.getY());
 							Position pLeft = new Position(m - 1, next.getY());
 
-							char right = grid.charAt(pRight);
-							char left = grid.charAt(pLeft);
-							grid.set(pRight, left);
-							grid.set(pLeft, right);
+							grid.swapChar(pRight, pLeft);
 						}
 						return true;
 					}
@@ -265,10 +415,7 @@ public class Day15
 							Position pLeft = new Position(m, next.getY());
 							Position pRight = new Position(m + 1, next.getY());
 
-							char right = grid.charAt(pRight);
-							char left = grid.charAt(pLeft);
-							grid.set(pRight, left);
-							grid.set(pLeft, right);
+							grid.swapChar(pRight, pLeft);
 						}
 						return true;
 					}
@@ -281,32 +428,20 @@ public class Day15
 
 		public long getGpsSum(boolean wide)
 		{
+			return getGpsSum(grid, wide);
+		}
+
+		long getGpsSum(Grid grid, boolean wide)
+		{
 			long result = 0;
 
-			if (wide)
-			{
-				List<Position> positions = grid.getPositionsOf('[');
+			char box = wide ? BOX_LEFT : BOX;
 
-				for (Position position : positions)
-				{
-					if (position.getX() < grid.getX()/2)
-					{
-						result += position.getY() * 100 + position.getX();
-					}
-					else
-					{
-						result += position.getY() * 100 + position.getX()+1;
-					}
-				}
-			}
-			else
-			{
-				List<Position> positions = grid.getPositionsOf('O');
+			List<Position> positions = grid.getPositionsOf(box);
 
-				for (Position position : positions)
-				{
-					result += position.getY() * 100 + position.getX();
-				}
+			for (Position position : positions)
+			{
+				result += position.getY() * 100 + position.getX();
 			}
 
 			return result;
